@@ -1,12 +1,10 @@
 # 🧾 Proyecto: Transformación Digital - Perfulandia SPA
 
-PSPA
-
 Este repositorio contiene el desarrollo técnico del sistema basado en microservicios para la empresa Perfulandia SPA, como parte de la Evaluación Parcial 2 de la asignatura **Desarrollo Full Stack I**.
 
 ## 📦 Descripción General del Proyecto
 
-> 📝 Explicar brevemente en qué consiste el sistema, qué problema resuelve y qué beneficios ofrece al reemplazar el antiguo sistema monolítico.
+> 📝  gestiona todo el proceso de entrega de pedidos.  Se encarga de los despachos, el seguimiento (permitiendo a los clientes ver el estado de su pedido, como indica RF09 ), la planificación de rutas y la coordinación con proveedores de transporte.  Aunque provee la información para las notificaciones (que enviaría el servicio S09 ), su rol principal es la operación logística de la entrega., qué problema resuelve y qué beneficios ofrece al reemplazar el antiguo sistema monolítico.
 
 ## 🧩 Arquitectura de Microservicios
 
@@ -16,8 +14,7 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 
 - `usuarioservice`: > 📝 Describir qué funcionalidades ofrece este microservicio.
 - `productoservice`: > 📝 Describir qué funcionalidades ofrece este microservicio.
-- `________service`: > 📝 Indicar el nombre y función del microservicio adicional implementado.
-- `________service`: > 📝 Indicar el nombre y función del microservicio adicional implementado.
+- `emailserviceservice`: > 📝 Indicar el nombre y función del microservicio adicional implementado.
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -38,9 +35,9 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 
 | Nombre                  | Rol en el proyecto         | Servicio principal trabajado |
 |-------------------------|----------------------------|------------------------------|
-| Nombre del integrante 1 | (Ej: Backend - Usuarios)   | usuarioservice               |
-| Nombre del integrante 2 | (Ej: Backend - Productos)  | productoservice              |
-| Nombre del integrante 3 | (Ej:Repositorio)           | pedidoservice                |
+| Angel Bustamante        | Repositorio                | emailservice                 |
+| Miguel Muñoz            | Productos                  | productoservice              |
+| Ismael Oyarzun          | usuarios                   | Usuarioservice               |
 
 ## 📂 Estructura del Repositorio
 
@@ -51,8 +48,7 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 📦 perfulandia-microservices
 ├── usuarioservice
 ├── productoservice
-├── pedidoservice (Ejemplo)
-├── notificacionservice (Ejemplo)
+├── emailservice
 └── README.md
 
 ```
