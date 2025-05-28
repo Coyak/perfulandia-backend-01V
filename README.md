@@ -20,11 +20,11 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 
 ## 🛠️ Tecnologías Utilizadas
 
-> 📝 * **Spring Boot:**
->     * **Maven:**
->     * **MySQL:**
->     * **Postman:**
->     * **GitHub:**
+> 📝 *Spring Boot
+>    * Maven
+>    * MySQL
+>    * Postman
+>    * GitHub
 
 ## 🗄️ Configuración de Bases de Datos
 
