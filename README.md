@@ -4,13 +4,25 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 
 ## 📦 Descripción General del Proyecto
 
-> 📝 Perfulandia SPA, una empresa chilena de perfumería en crecimiento, enfrenta problemas de lentitud, baja escalabilidad y errores debido a su sistema monolítico actual. Este proyecto propone una transformación digital hacia una arquitectura de microservicios para superar estas limitaciones.
-> El nuevo sistema resolverá fallas críticas como caídas en horas punta y ventas duplicadas
+> 📝Perfulandia SPA, una empresa chilena de perfumería en crecimiento, enfrenta problemas de lentitud, baja escalabilidad y errores debido a su sistema monolítico actual. Esta problemática afecta la productividad interna y la experiencia de los clientes. Este proyecto propone una transformación digital hacia una arquitectura de microservicios para superar estas limitaciones, permitiendo a la empresa evolucionar su plataforma y escalar de manera flexible.
+
+El nuevo sistema basado en microservicios ofrecerá beneficios clave en comparación con el sistema monolítico:
+* **Mayor Escalabilidad:** Permite escalar componentes individualmente.
+* **Mejor Mantenibilidad:** Facilita actualizaciones y mantenimiento.
+* **Incremento de Agilidad:** Agiliza la implementación de nuevas funcionalidades.
+* **Mayor Resiliencia:** Un fallo en un servicio no compromete todo el sistema.
 
 
 ## 🧩 Arquitectura de Microservicios
 
-> 📝 Describir cómo está estructurado el sistema en microservicios. Pueden incluir un diagrama y explicar brevemente la función de cada servicio.
+> 📝 El sistema se estructura en una arquitectura de microservicios, donde cada servicio se enfoca en una capacidad de negocio específica.
+> Esto permite que operen de forma independiente pero colaboren para entregar la funcionalidad completa.
+> Para esta evaluación, se han desarrollado los siguientes microservicios clave que demuestran los principios de esta arquitectura.
+
+### Microservicios Implementados en este Proyecto
+* **usuarioservice:** Encargado de la gestión de usuarios, incluyendo registro, autenticación y autorización.
+* **productoservice:** Administra la información de los productos, como descripción, precio, stock y categorías.
+* **emailserviceservice:** Responsable del envío de notificaciones y comunicaciones por correo electrónico.
 
 ### Microservicios Desarrollados
 
