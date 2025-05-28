@@ -4,7 +4,9 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 
 ## 📦 Descripción General del Proyecto
 
-> 📝  gestiona todo el proceso de entrega de pedidos.  Se encarga de los despachos, el seguimiento (permitiendo a los clientes ver el estado de su pedido, como indica RF09 ), la planificación de rutas y la coordinación con proveedores de transporte.  Aunque provee la información para las notificaciones (que enviaría el servicio S09 ), su rol principal es la operación logística de la entrega., qué problema resuelve y qué beneficios ofrece al reemplazar el antiguo sistema monolítico.
+> 📝 Perfulandia SPA, una empresa chilena de perfumería en crecimiento, enfrenta problemas de lentitud, baja escalabilidad y errores debido a su sistema monolítico actual. Este proyecto propone una transformación digital hacia una arquitectura de microservicios para superar estas limitaciones.
+> El nuevo sistema resolverá fallas críticas como caídas en horas punta y ventas duplicadas
+
 
 ## 🧩 Arquitectura de Microservicios
 
@@ -12,13 +14,17 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 
 ### Microservicios Desarrollados
 
-- `usuarioservice`: > 📝 Describir qué funcionalidades ofrece este microservicio.
-- `productoservice`: > 📝 Describir qué funcionalidades ofrece este microservicio.
-- `emailserviceservice`: > 📝 Indicar el nombre y función del microservicio adicional implementado.
+- `usuarioservice`: > 📝 Gestiona el registro, autenticación y autorización de los usuarios.
+- `productoservice`: > 📝 Maneja la información completa de los productos (descripción, precio, stock, categorías).
+- `emailserviceservice`: > 📝 Se encarga exclusivamente del envío de notificaciones por correo electrónico.
 
 ## 🛠️ Tecnologías Utilizadas
 
-> 📝 Listar las tecnologías y herramientas utilizadas en el proyecto (Spring Boot, Maven, MySQL, Postman, GitHub, etc.).
+> 📝 * **Spring Boot:**
+>     * **Maven:**
+>     * **MySQL:**
+>     * **Postman:**
+>     * **GitHub:**
 
 ## 🗄️ Configuración de Bases de Datos
 
@@ -59,7 +65,7 @@ Este repositorio contiene el desarrollo técnico del sistema basado en microserv
 
 ## 📈 Lecciones Aprendidas
 
-> 📝 Reflexionar brevemente sobre qué aprendieron durante el desarrollo del proyecto (técnico y en trabajo en equipo).
+> 📝 Aprendimos la leccion
 
 ---
 
