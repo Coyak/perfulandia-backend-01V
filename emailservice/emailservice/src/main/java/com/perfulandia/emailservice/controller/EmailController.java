@@ -1,6 +1,7 @@
 package com.perfulandia.emailservice.controller;
 
 import com.perfulandia.emailservice.model.EmailRequest;
+import com.perfulandia.emailservice.model.CompraRequest;
 import com.perfulandia.emailservice.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,22 @@ public class EmailController {
             return ResponseEntity.status(404).body("Usuario no encontrado con ID: " + request.getId());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al enviar el correo por id: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/compra-exitosa")
+    public ResponseEntity<?> enviarCompraExitosa(@RequestBody CompraRequest request) {
+        if (request.getUserId() == null || request.getProductoId() == null) {
+            return ResponseEntity.badRequest().body("Los campos 'userId' y 'productoId' son obligatorios.");
+        }
+
+        try {
+            emailService.enviarCorreoCompraExitosa(request.getUserId(), request.getProductoId());
+            return ResponseEntity.ok("Correo de compra exitosa enviado.");
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al enviar correo: " + e.getMessage());
         }
     }
 }
