@@ -23,12 +23,14 @@ El nuevo sistema basado en microservicios ofrecerá beneficios clave en comparac
 * **usuarioservice:** Encargado de la gestión de usuarios, incluyendo registro, autenticación y autorización.
 * **productoservice:** Administra la información de los productos, como descripción, precio, stock y categorías.
 * **emailserviceservice:** Responsable del envío de notificaciones y comunicaciones por correo electrónico.
+* **carritoservice:** Gestiona los carritos de compra de los usuarios, incluyendo la adición/eliminación de productos y el cálculo de totales.
 
 ### Microservicios Desarrollados
 
 - `usuarioservice`: > 📝 Gestiona el registro, autenticación y autorización de los usuarios.
 - `productoservice`: > 📝 Maneja la información completa de los productos (descripción, precio, stock, categorías).
 - `emailserviceservice`: > 📝 Se encarga exclusivamente del envío de notificaciones por correo electrónico.
+- `carritoservice`: > 📝 Administra los carritos de compra, permitiendo a los usuarios agregar productos, modificar cantidades y realizar el checkout.
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -37,15 +39,51 @@ El nuevo sistema basado en microservicios ofrecerá beneficios clave en comparac
 >    * MySQL
 >    * Postman
 >    * GitHub
+>    * Lombok (para reducir el código boilerplate)
 
 ## 🗄️ Configuración de Bases de Datos
 
-> 📝 Indicar qué motor de base de datos usaron, cómo configuraron la conexión (`application.properties`), y qué tablas y campos definieron para cada microservicio.
+> 📝 Cada microservicio utiliza su propia base de datos MySQL para mantener la independencia y el aislamiento de datos:
+
+### Configuración General (application.properties)
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/[nombre_base_datos]
+spring.datasource.username=root
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+### Bases de Datos por Servicio
+- **usuarioservice**: `perfulandia_usuarios_01v`
+- **productoservice**: `perfulandia_productos_01v`
+- **emailservice**: `perfulandia_email_01v`
+- **carritoservice**: `perfulandia_carritos_01v`
 
 ## 📮 Endpoints y Pruebas
 
-> 📝 Especificar los principales endpoints disponibles por microservicio (CRUD y llamadas entre servicios).  
-> Incluir capturas o descripciones de pruebas realizadas con Postman (mínimo 3 por micro-servicio).
+> 📝 Cada microservicio expone endpoints REST para su funcionalidad específica:
+
+### Carritoservice (Puerto 8084)
+- `POST /api/carrito`: Crear un nuevo carrito
+- `GET /api/carrito/{id}`: Obtener carrito por ID
+- `POST /api/carrito/{id}/items`: Agregar item al carrito
+- `DELETE /api/carrito/{id}/items/{itemId}`: Eliminar item del carrito
+- `GET /api/carrito/{id}/total`: Calcular total del carrito
+
+### Usuarioservice (Puerto 8081)
+- `POST /api/usuarios`: Registrar nuevo usuario
+- `GET /api/usuarios/{id}`: Obtener usuario por ID
+- `PUT /api/usuarios/{id}`: Actualizar usuario
+
+### Productoservice (Puerto 8082)
+- `GET /api/productos`: Listar todos los productos
+- `GET /api/productos/{id}`: Obtener producto por ID
+- `POST /api/productos`: Crear nuevo producto
+
+### Emailservice (Puerto 8083)
+- `POST /api/email`: Enviar correo electrónico
+- `GET /api/email/status`: Verificar estado del servicio
 
 ## 🧑‍💻 Integrantes del Equipo
 
@@ -59,25 +97,43 @@ El nuevo sistema basado en microservicios ofrecerá beneficios clave en comparac
 
 ## 📂 Estructura del Repositorio
 
-> 📝 Explicar brevemente la organización de carpetas del repositorio (por ejemplo, cada carpeta corresponde a un microservicio separado con su propio `pom.xml`).
+> 📝 El repositorio está organizado en microservicios independientes, cada uno con su propia configuración y dependencias:
 
 ```
-
 📦 perfulandia-microservices
 ├── usuarioservice
 ├── productoservice
 ├── emailservice
+├── carritoservice
 └── README.md
-
 ```
+
+Cada microservicio contiene:
+- `src/`: Código fuente
+- `pom.xml`: Configuración de Maven
+- `application.properties`: Configuración de la aplicación
 
 ## 👥 Colaboración en GitHub
 
-> 📝 Explicar cómo se organizó el trabajo en ramas (`master`, `pruebas`), frecuencia de commits y cómo se coordinaron como equipo.
+> 📝 El desarrollo se organizó utilizando las siguientes ramas:
+- `main`: Rama principal del proyecto
+- `testCarrito`: Rama para el desarrollo del servicio de carrito
+- `develop`: Rama de desarrollo para nuevas características
+
+Los commits se realizan con mensajes descriptivos siguiendo el formato:
+- `feat: [descripción]` para nuevas características
+- `fix: [descripción]` para correcciones
+- `docs: [descripción]` para actualizaciones de documentación
 
 ## 📈 Lecciones Aprendidas
 
-> 📝 Aprendimos la leccion
+> 📝 Durante el desarrollo de este proyecto, hemos aprendido:
+1. La importancia de la independencia entre microservicios
+2. Cómo manejar la comunicación entre servicios
+3. La necesidad de una buena documentación
+4. La importancia de las pruebas unitarias
+5. Cómo gestionar bases de datos independientes
+6. El valor de usar herramientas como Lombok para reducir código boilerplate
 
 ---
 
