@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.hateoas.EntityModel;
+import com.perfulandia.carritoservice.model.CarritoModelAssembler;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 /**
  * Controlador REST para el manejo de carritos de compras
@@ -37,6 +40,13 @@ public class CarritoController {
      */
     private final CarritoService carritoService;
     
+    private final CarritoModelAssembler assembler;
+    
+    public CarritoController(CarritoService carritoService, CarritoModelAssembler assembler) {
+        this.carritoService = carritoService;
+        this.assembler = assembler;
+    }
+    
     /**
      * Crea un nuevo carrito de compras para un usuario específico
      * 
@@ -45,13 +55,13 @@ public class CarritoController {
      * para manejarlo según los requerimientos del negocio.
      * 
      * @param usuarioId ID del usuario para el cual se creará el carrito
-     * @return ResponseEntity<Carrito> con el carrito creado y estado HTTP 200
+     * @return ResponseEntity<EntityModel<Carrito>> con el carrito creado y estado HTTP 200
      */
     @PostMapping("/usuario/{usuarioId}") // Mapea este método a peticiones POST en la ruta especificada
-    public ResponseEntity<Carrito> crearCarrito(@PathVariable Long usuarioId) { // Extrae el valor de la URL y lo convierte a Long
+    public ResponseEntity<EntityModel<Carrito>> crearCarrito(@PathVariable Long usuarioId) { // Extrae el valor de la URL y lo convierte a Long
         // Delega la lógica de creación al servicio
         Carrito carrito = carritoService.crearCarrito(usuarioId);
-        return ResponseEntity.ok(carrito);
+        return ResponseEntity.ok(assembler.toModel(carrito));
     }
     
     /**
@@ -61,13 +71,13 @@ public class CarritoController {
      * activo (no completado) y obtener sus detalles.
      * 
      * @param usuarioId ID del usuario del cual se quiere obtener el carrito
-     * @return ResponseEntity<Carrito> con el carrito activo o null si no existe
+     * @return ResponseEntity<EntityModel<Carrito>> con el carrito activo o null si no existe
      */
     @GetMapping("/usuario/{usuarioId}/activo") // Mapea este método a peticiones GET en la ruta especificada
-    public ResponseEntity<Carrito> obtenerCarritoActivo(@PathVariable Long usuarioId) { // Extrae el valor de la URL y lo convierte a Long
+    public ResponseEntity<EntityModel<Carrito>> obtenerCarritoActivo(@PathVariable Long usuarioId) { // Extrae el valor de la URL y lo convierte a Long
         // Delega la búsqueda al servicio
         Carrito carrito = carritoService.obtenerCarritoActivo(usuarioId);
-        return ResponseEntity.ok(carrito);
+        return ResponseEntity.ok(assembler.toModel(carrito));
     }
     
     /**

@@ -12,6 +12,12 @@ import java.util.List;
 import org.springframework.web.client.RestTemplate;
 //Para hacer peticiones HTTP a otros microservicios.
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
+import com.perfulandia.productservice.model.ProductoModelAssembler;
+import java.util.stream.Collectors;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 /**
  * Controlador REST para el manejo de productos
  * 
@@ -41,9 +47,11 @@ public class ProductoController {
      */
     private final ProductoService servicio;
     private final RestTemplate restTemplate;
-    public ProductoController(ProductoService servicio,  RestTemplate restTemplate){
+    private final ProductoModelAssembler assembler;
+    public ProductoController(ProductoService servicio,  RestTemplate restTemplate, ProductoModelAssembler assembler){
         this.servicio = servicio;
         this.restTemplate = restTemplate;
+        this.assembler = assembler;
     }
 
     /**
@@ -55,8 +63,12 @@ public class ProductoController {
      * @return ResponseEntity<List<Producto>> con la lista de productos
      */
     @GetMapping // Mapea este método a peticiones GET en la ruta base
-    public List<Producto> listar(){
-        return servicio.listar();
+    public CollectionModel<EntityModel<Producto>> listar(){
+        List<EntityModel<Producto>> productos = servicio.listar().stream()
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+        return CollectionModel.of(productos,
+            linkTo(methodOn(ProductoController.class).listar()).withSelfRel());
     }
     /**
      * Crea un nuevo producto en el catálogo
@@ -80,8 +92,9 @@ public class ProductoController {
      * @return ResponseEntity<Producto> con el producto encontrado o error 404 si no existe
      */
     @GetMapping("/{id}") // Mapea este método a peticiones GET en la ruta especificada
-    public Producto buscar(@PathVariable long id){
-        return servicio.bucarPorId(id);
+    public EntityModel<Producto> buscar(@PathVariable long id){
+        Producto producto = servicio.bucarPorId(id);
+        return assembler.toModel(producto);
     }
     /**
      * Elimina un producto del catálogo

@@ -22,7 +22,7 @@ import lombok.*;
  * @since 2025-06-30
  */
 @Entity // Marca esta clase como una entidad JPA que se mapea a una tabla
-@Table(name = "productos") // Especifica el nombre de la tabla en la base de datos
+@Table(name = "producto") // Especifica el nombre de la tabla en la base de datos
 @Data // Genera automáticamente getters, setters, toString, equals y hashCode
 @AllArgsConstructor // Genera constructor con todos los parámetros
 @NoArgsConstructor // Genera constructor sin parámetros (requerido por JPA)

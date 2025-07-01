@@ -5,6 +5,11 @@ import com.perfulandia.usuarioservice.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
+import com.perfulandia.usuarioservice.model.UsuarioModelAssembler;
+import java.util.stream.Collectors;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
 
@@ -38,20 +43,24 @@ public class UsuarioController {
      */
     private final UsuarioService usuarioService;
     
+    private final UsuarioModelAssembler assembler;
+    
     /**
      * Obtiene todos los usuarios registrados
      * 
      * Este endpoint retorna una lista con todos los usuarios
      * que están registrados en el sistema.
      * 
-     * @return ResponseEntity<List<Usuario>> con la lista de usuarios
+     * @return ResponseEntity<CollectionModel<EntityModel<Usuario>>> con la lista de usuarios
      */
     @GetMapping // Mapea este método a peticiones GET en la ruta base
-    public ResponseEntity<List<Usuario>> obtenerTodosLosUsuarios() {
+    public ResponseEntity<CollectionModel<EntityModel<Usuario>>> obtenerTodosLosUsuarios() {
         try {
-            // Delega la búsqueda al servicio
-            List<Usuario> usuarios = usuarioService.listar();
-            return ResponseEntity.ok(usuarios);
+            List<EntityModel<Usuario>> usuarios = usuarioService.listar().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+            return ResponseEntity.ok(CollectionModel.of(usuarios,
+                linkTo(methodOn(UsuarioController.class).obtenerTodosLosUsuarios()).withSelfRel()));
         } catch (Exception e) {
             // Manejar errores y retornar HTTP 500
             return ResponseEntity.internalServerError().build();
@@ -65,15 +74,15 @@ public class UsuarioController {
      * específico usando su identificador único.
      * 
      * @param id ID del usuario a buscar
-     * @return ResponseEntity<Usuario> con el usuario encontrado o error 404 si no existe
+     * @return ResponseEntity<EntityModel<Usuario>> con el usuario encontrado o error 404 si no existe
      */
     @GetMapping("/{id}") // Mapea este método a peticiones GET en la ruta especificada
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) { // Extrae el valor de la URL y lo convierte a Long
+    public ResponseEntity<EntityModel<Usuario>> obtenerUsuarioPorId(@PathVariable Long id) { // Extrae el valor de la URL y lo convierte a Long
         try {
             // Delega la búsqueda al servicio
             Usuario usuario = usuarioService.buscar(id);
             if (usuario != null) {
-                return ResponseEntity.ok(usuario);
+                return ResponseEntity.ok(assembler.toModel(usuario));
             } else {
                 return ResponseEntity.notFound().build();
             }
