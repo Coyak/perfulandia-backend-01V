@@ -101,6 +101,21 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope> <!-- Solo disponible en tests -->
 		</dependency>
+		
+		<!-- Mockito Inline - Permite mockear clases concretas (necesario para ProductoService) -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
+			<version>4.11.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Swagger/OpenAPI UI - Starter compatible con Spring Boot 3.4.x -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 	</dependencies>
 
 	<!-- Configuración del build -->

@@ -12,6 +12,10 @@ import java.util.List;
 import org.springframework.web.client.RestTemplate;
 //Para hacer peticiones HTTP a otros microservicios.
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * Controlador REST para el manejo de productos
  * 
@@ -33,6 +37,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @RestController // Marca esta clase como un controlador REST que devuelve respuestas en formato JSON automáticamente
 @RequestMapping("/api/productos") // Define la ruta base para todos los endpoints
+@Tag(name = "Productos", description = "Operaciones relacionadas con productos")
 public class ProductoController {
 
     /**
@@ -55,6 +60,8 @@ public class ProductoController {
      * @return ResponseEntity<List<Producto>> con la lista de productos
      */
     @GetMapping // Mapea este método a peticiones GET en la ruta base
+    @Operation(summary = "Listar productos", description = "Obtiene la lista de todos los productos")
+    @ApiResponse(responseCode = "200", description = "Lista de productos obtenida correctamente")
     public List<Producto> listar(){
         return servicio.listar();
     }
@@ -67,6 +74,8 @@ public class ProductoController {
      * @return Producto creado con ID generado automáticamente
      */
     @PostMapping // Mapea este método a peticiones POST en la ruta base
+    @Operation(summary = "Guardar producto", description = "Guarda un nuevo producto")
+    @ApiResponse(responseCode = "201", description = "Producto guardado correctamente")
     public Producto guardar(@RequestBody Producto producto) { // Extrae el cuerpo de la petición HTTP y lo convierte a Producto
         return servicio.guardar(producto);
     }
@@ -80,6 +89,9 @@ public class ProductoController {
      * @return ResponseEntity<Producto> con el producto encontrado o error 404 si no existe
      */
     @GetMapping("/{id}") // Mapea este método a peticiones GET en la ruta especificada
+    @Operation(summary = "Buscar producto por ID", description = "Obtiene un producto específico por su ID")
+    @ApiResponse(responseCode = "200", description = "Producto encontrado")
+    @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     public Producto buscar(@PathVariable long id){
         return servicio.bucarPorId(id);
     }
@@ -92,6 +104,8 @@ public class ProductoController {
      * @param id ID del producto a eliminar
      */
     @DeleteMapping("/{id}") // Mapea este método a peticiones DELETE en la ruta especificada
+    @Operation(summary = "Eliminar producto", description = "Elimina un producto del catálogo")
+    @ApiResponse(responseCode = "204", description = "Producto eliminado correctamente")
     public void eliminar(@PathVariable long id) { // Extrae el valor de la URL y lo convierte a long
         servicio.eliminar(id);
     }
@@ -106,6 +120,9 @@ public class ProductoController {
      * @return ResponseEntity<Usuario> con la información del usuario o error 500 si hay problemas de conexión
      */
     @GetMapping("/usuario/{id}") // Mapea este método a peticiones GET en la ruta especificada
+    @Operation(summary = "Obtener usuario", description = "Obtiene información de un usuario desde el microservicio de usuarios")
+    @ApiResponse(responseCode = "200", description = "Usuario encontrado")
+    @ApiResponse(responseCode = "500", description = "Error de conexión con el microservicio de usuarios")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable long id) { // Extrae el valor de la URL y lo convierte a long
         try {
             Usuario usuario = restTemplate.getForObject("http://localhost:8081/api/usuarios/"+id, Usuario.class);

@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="carritoservice" />
+        <module name="emailservice" />
       </profile>
       <profile name="Annotation profile for usuarioservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -18,7 +19,6 @@
         </processorPath>
         <module name="usuarioservice" />
         <module name="productservice" />
-        <module name="emailservice" />
       </profile>
     </annotationProcessing>
   </component>

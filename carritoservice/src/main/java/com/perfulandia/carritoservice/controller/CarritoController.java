@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controlador REST para el manejo de carritos de compras
@@ -29,6 +32,7 @@ import java.util.List;
 @RestController // Marca esta clase como un controlador REST que devuelve respuestas en formato JSON automáticamente
 @RequestMapping("/api/carrito") // Define la ruta base para todos los endpoints
 @RequiredArgsConstructor // Genera un constructor con los campos final (inyección de dependencias)
+@Tag(name = "Carrito", description = "Operaciones relacionadas con el carrito de compras")
 public class CarritoController {
     
     /**
@@ -48,6 +52,8 @@ public class CarritoController {
      * @return ResponseEntity<Carrito> con el carrito creado y estado HTTP 200
      */
     @PostMapping("/usuario/{usuarioId}") // Mapea este método a peticiones POST en la ruta especificada
+    @Operation(summary = "Crear carrito", description = "Crea un nuevo carrito de compras para un usuario específico")
+    @ApiResponse(responseCode = "200", description = "Carrito creado correctamente")
     public ResponseEntity<Carrito> crearCarrito(@PathVariable Long usuarioId) { // Extrae el valor de la URL y lo convierte a Long
         // Delega la lógica de creación al servicio
         Carrito carrito = carritoService.crearCarrito(usuarioId);
@@ -64,6 +70,8 @@ public class CarritoController {
      * @return ResponseEntity<Carrito> con el carrito activo o null si no existe
      */
     @GetMapping("/usuario/{usuarioId}/activo") // Mapea este método a peticiones GET en la ruta especificada
+    @Operation(summary = "Obtener carrito activo", description = "Obtiene el carrito activo de un usuario específico")
+    @ApiResponse(responseCode = "200", description = "Carrito activo obtenido correctamente")
     public ResponseEntity<Carrito> obtenerCarritoActivo(@PathVariable Long usuarioId) { // Extrae el valor de la URL y lo convierte a Long
         // Delega la búsqueda al servicio
         Carrito carrito = carritoService.obtenerCarritoActivo(usuarioId);
@@ -84,6 +92,9 @@ public class CarritoController {
      * @return ResponseEntity<ItemCarrito> con el item creado o error 400 si los datos son inválidos
      */
     @PostMapping("/{carritoId}/items") // Mapea este método a peticiones POST en la ruta especificada
+    @Operation(summary = "Agregar item al carrito", description = "Agrega un item (producto) a un carrito específico")
+    @ApiResponse(responseCode = "200", description = "Item agregado correctamente")
+    @ApiResponse(responseCode = "400", description = "Datos inválidos para agregar el item")
     public ResponseEntity<ItemCarrito> agregarItem(
             @PathVariable Long carritoId, // Extrae el valor de la URL y lo convierte a Long
             @RequestParam Long productoId, // Extrae el parámetro de la query string
@@ -111,6 +122,8 @@ public class CarritoController {
      * @return ResponseEntity<List<ItemCarrito>> con la lista de items del carrito
      */
     @GetMapping("/{carritoId}/items") // Mapea este método a peticiones GET en la ruta especificada
+    @Operation(summary = "Obtener items del carrito", description = "Obtiene todos los items de un carrito específico")
+    @ApiResponse(responseCode = "200", description = "Items del carrito obtenidos correctamente")
     public ResponseEntity<List<ItemCarrito>> obtenerItemsCarrito(@PathVariable Long carritoId) { // Extrae el valor de la URL y lo convierte a Long
         // Delega la búsqueda al servicio
         List<ItemCarrito> items = carritoService.obtenerItemsCarrito(carritoId);
@@ -128,6 +141,8 @@ public class CarritoController {
      * @return ResponseEntity<Void> con estado HTTP 200 si se completa exitosamente
      */
     @PostMapping("/{carritoId}/completar") // Mapea este método a peticiones POST en la ruta especificada
+    @Operation(summary = "Completar carrito", description = "Completa un carrito de compras")
+    @ApiResponse(responseCode = "200", description = "Carrito completado correctamente")
     public ResponseEntity<Void> completarCarrito(@PathVariable Long carritoId) { // Extrae el valor de la URL y lo convierte a Long
         // Delega la lógica de completar carrito al servicio
         carritoService.completarCarrito(carritoId);
