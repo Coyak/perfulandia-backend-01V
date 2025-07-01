@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Archivo de configuración Maven para el microservicio de carrito de compras -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- Configuración del proyecto padre (Spring Boot) -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
+		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
+	<!-- Información del proyecto -->
 	<groupId>com.perfulandia</groupId>
-	<artifactId>carrito</artifactId>
+	<artifactId>carritoservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>carrito</name>
-	<description>Demo project for Spring Boot</description>
+	<name>carritoservice</name>
+	<description>Carrito de compras para Perfulandia</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -26,42 +31,112 @@
 		<tag/>
 		<url/>
 	</scm>
+	
+	<!-- Propiedades del proyecto -->
 	<properties>
-		<java.version>17</java.version>
+		<java.version>17</java.version> <!-- Versión de Java requerida -->
+		<byte-buddy.version>1.14.12</byte-buddy.version> <!-- Versión de ByteBuddy para Mockito -->
 	</properties>
+	
+	<!-- Dependencias del proyecto -->
 	<dependencies>
+		<!-- Spring Boot Starter para JPA - Proporciona funcionalidad de persistencia -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		
+		<!-- Spring Boot Starter Web - Proporciona funcionalidad web y REST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		
+		<!-- Conector MySQL para la base de datos de producción -->
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope> <!-- Solo disponible en runtime, no en compile -->
+		</dependency>
+		
+		<!-- Base de datos H2 para tests (memoria) -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope> <!-- Solo disponible en tests -->
+		</dependency>
+		
+		<!-- Lombok - Reduce código boilerplate (getters, setters, constructores) -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional> <!-- No se incluye en el JAR final -->
+		</dependency>
+		
+		<!-- Spring Boot Starter Test - Framework de testing -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Spring Boot DevTools - Herramientas de desarrollo (auto-reload) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- ByteBuddy Agent - Necesario para Mockito con Java 22+ -->
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-			<scope>runtime</scope>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+			<version>${byte-buddy.version}</version>
 		</dependency>
+		
+		<!-- Mockito Core - Framework de mocking para tests -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
+		</dependency>
+		
+		<!-- Mockito JUnit Jupiter - Integración de Mockito con JUnit 5 -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Jackson Databind - Serialización/deserialización JSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 	</dependencies>
 
+	<!-- Configuración del build -->
 	<build>
 		<plugins>
+			<!-- Plugin de Spring Boot Maven -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- Excluir Lombok del JAR final -->
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+					<!-- Argumentos JVM para ByteBuddy -->
+					<jvmArguments>
+						-XX:+EnableDynamicAgentLoading
+						-Djdk.instrument.traceUsage
+					</jvmArguments>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
