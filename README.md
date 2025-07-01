@@ -263,3 +263,100 @@ cd [nombre-microservicio]
 4. **Configurar CI/CD con ejecución automática de tests**
 5. **Agregar tests de aceptación (end-to-end)**
 
+## 🔒 Seguridad y Buenas Prácticas
+
+- **Separación de ambientes:** Cada microservicio tiene su propio archivo de configuración para producción y testing.
+- **Gestión de dependencias:** Uso de Maven para asegurar versiones compatibles y reproducibles.
+- **Validación de datos:** Se implementan validaciones en los DTOs y controladores para evitar datos inconsistentes.
+- **Manejo de errores:** Respuestas claras y estructuradas ante errores de negocio o del sistema.
+
+---
+
+## 📖 Documentación de la API con Swagger / OpenAPI
+
+Cada microservicio (excepto emailservice) expone su documentación interactiva con Swagger UI, permitiendo probar los endpoints y visualizar los modelos de datos en tiempo real.
+
+### ¿Cómo se integró Swagger/OpenAPI?
+- Se añadió la dependencia `springdoc-openapi-starter-webmvc-ui` en el `pom.xml` de cada microservicio:
+  ```xml
+  <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.5.0</version>
+  </dependency>
+  ```
+- Compatible con Spring Boot 3.x.
+- No requiere configuración adicional: al iniciar el microservicio, la documentación está disponible automáticamente.
+
+### Anotaciones utilizadas
+- `@Tag`: Agrupa y describe los endpoints de cada controlador.
+- `@Operation`: Documenta cada endpoint, su propósito y parámetros.
+- `@ApiResponse`: Especifica posibles respuestas HTTP y sus descripciones.
+
+### Acceso a Swagger UI
+- usuarioservice: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
+- productservice: [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html)
+- carritoservice: [http://localhost:8084/swagger-ui.html](http://localhost:8084/swagger-ui.html)
+
+### Ejemplo de uso en el código
+```java
+@Tag(name = "Usuarios", description = "Operaciones relacionadas con usuarios")
+@RestController
+@RequestMapping("/api/usuarios")
+public class UsuarioController {
+    @Operation(summary = "Obtener usuario por ID", description = "Devuelve un usuario específico por su ID")
+    @ApiResponse(responseCode = "200", description = "Usuario encontrado")
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> getUsuario(@PathVariable Long id) {
+        // ...
+    }
+}
+```
+
+---
+
+## 🔗 HATEOAS (Hypermedia as the Engine of Application State)
+
+HATEOAS está implementado en usuarioservice, productservice y carritoservice. Las respuestas de los endpoints principales incluyen enlaces de navegación (`_links`) que permiten descubrir acciones relacionadas, siguiendo el principio REST de autodescubrimiento.
+
+### ¿Cómo se integró HATEOAS?
+- Se añadió la dependencia de Spring HATEOAS en el `pom.xml`:
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-hateoas</artifactId>
+  </dependency>
+  ```
+- Se crearon clases ensambladoras (`ModelAssembler`) para cada entidad principal, encargadas de construir los modelos con enlaces.
+- Los controladores retornan `EntityModel<T>` o `CollectionModel<T>` en vez de las entidades simples.
+
+### Ejemplo de uso en el código
+```java
+@GetMapping("/{id}")
+public EntityModel<Producto> one(@PathVariable Long id) {
+    Producto producto = productoService.getProductoById(id);
+    return assembler.toModel(producto);
+}
+```
+
+### Ejemplo de respuesta HATEOAS
+```json
+{
+  "id": 1,
+  "nombre": "Producto de ejemplo",
+  "_links": {
+    "self": { "href": "http://localhost:8082/productos/1" },
+    "productos": { "href": "http://localhost:8082/productos" }
+  }
+}
+```
+
+### Beneficios
+- Descubrimiento dinámico de recursos y acciones.
+- Menor acoplamiento entre cliente y servidor.
+- Facilita la evolución de la API.
+
+### Referencias
+- [Documentación oficial de Spring HATEOAS](https://docs.spring.io/spring-hateoas/docs/current/reference/html/)
+- [REST maturity model: HATEOAS](https://martinfowler.com/articles/richardsonMaturityModel.html)
+
